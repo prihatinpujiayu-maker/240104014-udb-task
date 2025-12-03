@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: 240104014_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword123   # ganti sesuai kebutuhan
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+    command: --mysql-native-password=ON
+
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: 240104014_phpmyadmin
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: rootpassword123
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root123
+    depends_on:
+      - db
+
+volumes:
+  db_data:
